@@ -32,13 +32,13 @@ def unpack_data(input_dir, output_file):
     data_frames = []
 
     # Parcours des fichiers et verification du format csv
-    for dir_name in os.listdir(input_dir):
-        dir_path = os.path.join(input_dir, dir_name)
+    for root, _, files in os.walk(input_dir):
+        for file_name in files:
+            file_path = os.path.join(input_dir, file_name)
         
-        for file_name in os.listdir(dir_path):
+            # for file_name in os.listdir(dir_path):
             if (file_name.endswith(('csv')) or 'data-' in file_name):
-                file_path = os.path.join(input_dir, file_name)
-                # print(f'====file_path=== : {file_path}')
+                # file_path = os.path.join(input_dir, file_name)
                 data = pd.read_csv(
                     file_path,
                     # Nom des colonnes à garder
@@ -48,7 +48,6 @@ def unpack_data(input_dir, output_file):
 
         # Sauvegarde du resultat en csv
         combined_data = pd.concat(data_frames, ignore_index=True)
-        # print(f'========= combined_data =========== : {combined_data}')
         combined_data.to_csv(output_file, index=False)
 
     pass
