@@ -29,6 +29,27 @@ def unpack_data(input_dir, output_file):
     - Combinez les DataFrames avec `pd.concat`.
     - Sauvegardez le résultat avec `to_csv`.
     """
+    data_frames = []
+
+    # Parcours des fichiers et verification du format csv
+    for dir_name in os.listdir(input_dir):
+        dir_path = os.path.join(input_dir, dir_name)
+        
+        for file_name in os.listdir(dir_path):
+            if (file_name.endswith(('csv')) or 'data-' in file_name):
+                file_path = os.path.join(input_dir, file_name)
+                # print(f'====file_path=== : {file_path}')
+                data = pd.read_csv(
+                    file_path,
+                    # Nom des colonnes à garder
+                    names=['sequence', 'family_accession', 'sequence_name', 'aligned_sequence', 'family_id']
+                )
+                data_frames.append(data)
+
+        # Sauvegarde du resultat en csv
+        combined_data = pd.concat(data_frames, ignore_index=True)
+        # print(f'========= combined_data =========== : {combined_data}')
+        combined_data.to_csv(output_file, index=False)
 
     pass
 
